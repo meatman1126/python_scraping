@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ポートフォリオ一覧</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>ポートフォリオ一覧</h1>
+        <div class="card-container">
+            <!-- ここにカードを追加 -->
+            <div class="card">
+                <a href="{{ url_for('scraping_page.file') }}">
+                    <img src="{{ url_for('static', filename='images/scraping.jpg') }}" alt="ポートフォリオ1">
+                </a>
+                <h3>企業情報取得ツール</h3>
+                <p>企業情報の取得を自動で行うことのできるWebスクレイピングツールです。<br> 営業リストの作成などに使用することが可能です。</p>
+            </div>
+            <div class="card">
+                <img src="{{ url_for('static', filename='images/scraping.jpg') }}" alt="ポートフォリオ2">
+                <h3>タイトル1</h3>
+                <p>ポートフォリオ2の説明文</p>
+            </div>
+            <div class="card">
+                <img src="{{ url_for('static', filename='images/scraping.jpg') }}" alt="ポートフォリオ3">
+                <h3>タイトル1</h3>
+                <p>ポートフォリオ3の説明文</p>
+            </div>
+            <!-- カードの追加終わり -->
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,41 @@
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
+}
+
+.modal-content {
+    position: relative;
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    border-radius: 20px; /* モーダルの角を丸くする */
+    width: 33%; /* 親画面の3分の1程度のサイズに縮小 */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content p, /* ラベルのサイズ調整 */
+.modal-content button { /* ボタンのサイズ調整 */
+    font-size: 1.5rem; /* テキストのサイズを拡大 */
+    width: 100%; /* モーダルの幅に合わせて拡大 */
+    text-align: center;
+}
+
+.modal-button {
+    margin: 20px; /* ボタンとテキストの間隔 */
+    background-color: #add8e6; /* ライトブルーに変更 */
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px; /* ボタンの角を丸くする */
+    cursor: pointer;
+}

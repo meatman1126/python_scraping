@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>File Upload</title>
+</head>
+<body>
+    <h2>Upload File</h2>
+    <form action="{{ url_for('scraping_page.upload_file') }}" method="post" enctype="multipart/form-data">
+        <label for="fileUpload">企業名が記載されたCSVファイルを選択してください。</label>
+        <input type="file" id="fileUpload" name="fileUpload" accept=".csv">
+        <br>
+        <button type="submit">Upload</button>
+    </form>
+</body>
+</html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>ユーザ登録画面</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/user_register.css') }}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+</head>
+<body>
+    <div class="registration-container">
+        <h2>ユーザ登録</h2>
+        <form action="{{ url_for('user_page.register') }}" method="post" id="register-form">
+            <div class="form-group">
+                <label for="email">メールアドレス</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="password">パスワード</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <div class="form-group">
+                <label for="username">ユーザ名</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+            <div class="form-group">
+                <label for="notes">備考</label>
+                <textarea id="note" name="note" required></textarea>
+            </div>
+            <div class="button-group">
+                <button type="submit" class="register-btn">登録</button>
+                <button type="button" class="cancel-btn">キャンセル</button>
+            </div>
+        </form>
+    </div>
+    {% set button_id='user_register_ok' %}
+    {% include 'common/modal.html' %}
+    <script>
+        $(document).ready(function() {
+            $('#register-form').submit(function(e) {
+                e.preventDefault(); // フォームの通常の送信を防ぎます。
+                $.ajax({
+                    url: '/register', // Flaskのエンドポイント
+                    type: 'POST',
+                    data: $(this).serialize(), // フォームのデータをシリアライズ
+                    success: function(response) {
+                        $('#myModal').css("display", 'block');
+                    },
+                    error: function(error) {
+                        console.error("エラー発生", error);
+                    }
+                });
+                
+            });
+        });
+    </script>
+</body>
+</html>
