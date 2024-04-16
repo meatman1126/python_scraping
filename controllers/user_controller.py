@@ -1,5 +1,5 @@
 from models.user import User
-from flask import render_template, request, redirect, Blueprint, url_for
+from flask import render_template, request, redirect, Blueprint, url_for, jsonify
 from flask_security import auth_required, current_user, login_required
 
 
@@ -26,16 +26,19 @@ def auth():
 
 @user_page.get("/register")
 def register_form():
-    return render_template("user_register.html")
+    return render_template("user_register.html", register_url="/register")
 
 
 @user_page.post("/register")
 def register():
+    data = request.get_json()
+
     userinfo = {
-        "email": request.form["email"],
-        "password": request.form["password"],
-        "username": request.form["username"],
-        "note": request.form["note"],
+        "email": data.get("email"),
+        "password": data.get("password"),
+        "username": data.get("username"),
+        "note": data.get("note"),
     }
     User.register(userinfo)
-    return "register completed"
+    response = {"stasus": "success", "message": "user registered"}
+    return jsonify(response), 200

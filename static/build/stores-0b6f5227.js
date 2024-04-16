@@ -1,0 +1,2 @@
+import{v as t,s as n}from"./index-4cbe80f4.js";const e=[];function s(s,o=t){let i;const c=new Set;function r(t){if(n(s,t)&&(s=t,i)){const t=!e.length;for(const t of c)t[1](),e.push(t,s);if(t){for(let t=0;t<e.length;t+=2)e[t][0](e[t+1]);e.length=0}}}return{set:r,update:function(t){r(t(s))},subscribe:function(n,e=t){const f=[n,e];return c.add(f),1===c.size&&(i=o(r)||t),n(s),()=>{c.delete(f),0===c.size&&i&&(i(),i=null)}}}}const o=s(!1),i=s(!1);export{i,o as r};
+//# sourceMappingURL=stores-0b6f5227.js.map

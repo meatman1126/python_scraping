@@ -14,6 +14,7 @@ class SystemConfig:
     REMEMBER_COOKIE_SAMESITE = "strict"
     SESSION_COOKIE_SAMESITE = "strict"
     SECURITY_POST_LOGIN_VIEW = "/index"
+    SECURITY_POST_LOGOUT_VIEW = "/login"
 
 
 Config = SystemConfig
