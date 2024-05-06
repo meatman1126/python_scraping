@@ -1,18 +1,22 @@
 <script>
-	import Modal from "./components/Modal.svelte";
+	import { Button, Modal, ModalBody, ModalHeader } from "sveltestrap";
+
 	import UserRegisterForm from "./components/UserRegisterForm.svelte";
 	import { registered } from "./components/stores.js";
 
-	let showModal = false;
-	$: showModal = $registered;
+	let isModalOpen = false;
+	$: isModalOpen = $registered;
+
+	function toLoginPage() {
+		window.location.href = "/logout";
+	}
 </script>
 
-<!-- <button on:click={() => (showModal = true)}> show modal </button> -->
-
 <UserRegisterForm register_url="/register" />
-<Modal bind:showModal>
-	<h2 slot="header">
-		ユーザ登録が完了しました。<br />
-		ログイン画面に遷移します。
-	</h2>
+<Modal isOpen={isModalOpen} size="sm">
+	<ModalHeader>ユーザ登録完了</ModalHeader>
+	<ModalBody class="modal-body">
+		<h5>ログイン画面に遷移します。</h5>
+		<Button color="primary" block="true" on:click={toLoginPage}>OK</Button>
+	</ModalBody>
 </Modal>

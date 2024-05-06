@@ -1,9 +1,12 @@
 <script>
 	import { Button, Modal, ModalBody, ModalHeader } from "sveltestrap";
 	import Menu from "./components/Menu.svelte";
+	import Spinner from "./components/Spinner.svelte";
+	import { isLoading } from "./components/stores.js";
 	let isModalOpen = false;
 	let selectedFile;
 	let selectedFileName = "";
+	let fileInput;
 
 	function toggleModal() {
 		isModalOpen = !isModalOpen;
@@ -19,7 +22,7 @@
 			alert("ファイルが選択されていません。");
 			return;
 		}
-
+		isLoading.set(true);
 		const formData = new FormData();
 		formData.append("fileUpload", selectedFile);
 
@@ -46,10 +49,14 @@
 		} catch (error) {
 			console.error("Upload failed:", error);
 		}
+		isLoading.set(false);
+		fileInput.value = "";
 		selectedFile = null;
 		selectedFileName = "";
 	}
 </script>
+
+<Spinner />
 
 <form on:submit={handleSubmit}>
 	<div class="screen">
@@ -68,12 +75,14 @@
 					type="file"
 					id="fileUpload"
 					name="fileUpload"
-					on:change={handleFileChange}
+					bind:this={fileInput}
+					on:input={handleFileChange}
 					style="display: none;"
 					accept=".csv"
 				/>
 			</label>
 		</div>
+
 		<Button type="submit" outline color="light">
 			企業情報を取得する <i class="fa fa-upload ml-2"></i>
 		</Button>

@@ -31,9 +31,10 @@ function serve() {
 
 export default {
 	input: { 
-		main: 'src/userRegister.js',
+		userRegister: 'src/userRegister.js',
 		scraping: 'src/scraping.js',
 		index: 'src/index.js',
+		voice: 'src/voice.js',
 	},
 	output: {
 		sourcemap: true,
@@ -73,7 +74,8 @@ export default {
 
 		// If we're building for production (npm run build
 		// instead of npm run dev), minify
-		production && terser()
+		production && terser(),
+		livereload('public')
 	],
 	watch: {
 		clearScreen: false

@@ -1,0 +1,2 @@
+import{K as t,s as n}from"./Button-5d79c38a.js";const e=[];function s(s,o=t){let c;const i=new Set;function r(t){if(n(s,t)&&(s=t,c)){const t=!e.length;for(const t of i)t[1](),e.push(t,s);if(t){for(let t=0;t<e.length;t+=2)e[t][0](e[t+1]);e.length=0}}}return{set:r,update:function(t){r(t(s))},subscribe:function(n,e=t){const u=[n,e];return i.add(u),1===i.size&&(c=o(r)||t),n(s),()=>{i.delete(u),0===i.size&&c&&(c(),c=null)}}}}const o=s(!1),c=s(!1);export{c as i,o as r};
+//# sourceMappingURL=stores-a82f68a8.js.map

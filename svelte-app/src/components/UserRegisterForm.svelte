@@ -2,6 +2,7 @@
     // import { writable } from "svelte/store";
 
     // export const registered = writable(false);
+    import { Button, Input, InputGroup, InputGroupText } from "sveltestrap";
     import { registered } from "./stores.js";
     export let register_url;
     let email = "";
@@ -47,6 +48,20 @@
     >
         <div class="form-group">
             <label for="email">メールアドレス</label>
+            <InputGroup>
+                <InputGroupText>
+                    <i class="fas fa-envelope"></i>
+                </InputGroupText>
+                <Input
+                    type="email"
+                    id="email"
+                    name="email"
+                    placeholder="メールアドレスを入力"
+                    required
+                    bind:value={email}
+                />
+            </InputGroup>
+            <!-- <label for="email">メールアドレス</label>
             <input
                 type="email"
                 id="email"
@@ -54,9 +69,25 @@
                 required
                 bind:value={email}
             />
+            <i class="fas fa-envelope"></i> -->
         </div>
         <div class="form-group">
             <label for="password">パスワード</label>
+            <InputGroup>
+                <InputGroupText>
+                    <i class="fas fa-lock"></i>
+                </InputGroupText>
+                <Input
+                    type="password"
+                    id="password"
+                    name="password"
+                    placeholder="パスワードを入力"
+                    required
+                    bind:value={password}
+                />
+            </InputGroup>
+
+            <!-- <label for="password">パスワード</label>
             <input
                 type="password"
                 id="password"
@@ -64,24 +95,56 @@
                 required
                 bind:value={password}
             />
+            <i class="fas fa-lock"></i> -->
         </div>
         <div class="form-group">
             <label for="username">ユーザ名</label>
-            <input
+            <InputGroup>
+                <InputGroupText>
+                    <i class="fas fa-user"></i>
+                </InputGroupText>
+                <Input
+                    type="text"
+                    id="username"
+                    name="username"
+                    placeholder="ユーザ名を入力"
+                    required
+                    bind:value={username}
+                />
+            </InputGroup>
+
+            <!-- <input
                 type="text"
                 id="username"
                 name="username"
                 required
                 bind:value={username}
-            />
+            /> -->
         </div>
         <div class="form-group">
             <label for="note">備考</label>
-            <textarea id="note" name="note" bind:value={note}></textarea>
+            <InputGroup>
+                <InputGroupText>
+                    <i class="fas fa-comment"></i>
+                </InputGroupText>
+                <Input
+                    type="textarea"
+                    id="note"
+                    name="note"
+                    placeholder="備考を入力"
+                    bind:value={note}
+                />
+            </InputGroup>
+
+            <!-- <textarea id="note" name="note" bind:value={note}></textarea> -->
         </div>
         <div class="button-group">
-            <button type="submit" class="register-btn">登録</button>
-            <button type="button" class="cancel-btn">キャンセル</button>
+            <Button
+                type="submit"
+                color="primary"
+                block="true"
+                class="register-btn">登録</Button
+            >
         </div>
     </form>
 </div>
@@ -110,24 +173,24 @@
         margin-bottom: 5px;
     }
 
-    input[type="email"],
-    input[type="password"],
-    input[type="text"],
+    /* input[type="email"],
+    input[type="password"], */
+    /* input[type="text"],
     textarea {
         width: 100%;
         padding: 10px;
         margin-bottom: 10px;
         border: 1px solid #ddd;
         border-radius: 4px;
-        box-sizing: border-box; /* 入力フィールドのサイズを調整 */
+        box-sizing: border-box; 
     }
-
+ */
     .button-group {
         display: flex;
         justify-content: space-between;
     }
 
-    .register-btn,
+    /* .register-btn,
     .cancel-btn {
         padding: 10px 20px;
         border: none;
@@ -151,5 +214,5 @@
 
     .cancel-btn:hover {
         background-color: #545b62;
-    }
+    } */
 </style>

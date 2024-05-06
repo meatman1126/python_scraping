@@ -4,6 +4,8 @@ import os
 from dotenv import load_dotenv
 from io import StringIO
 import datetime
+from bs4 import BeautifulSoup
+import re
 
 # .envファイルの内容を読み込見込む
 load_dotenv()
@@ -11,21 +13,53 @@ load_dotenv()
 api_key = os.environ.get("GOOGLE_CUSTOME_SEARCH_JSON_API_KEY")
 cse_id = os.environ.get("CUSTOME_SEARCH_ENGINE_ID")
 URL = f"https://www.googleapis.com/customsearch/v1?key={api_key}&cx={cse_id}"
+num_results = 1
+# 電話番号を抽出するための正規表現パターン
+phone_pattern = r"\d{2,4}-\d{2,4}-\d{4}"
 
 
 def search_company_info(company_name):
     """企業名に基づいて情報を検索し、結果を返す"""
-    params = {"q": company_name}
+    params = {"q": company_name + " お問い合わせ", "num": num_results}
     response = requests.get(URL, params=params)
-    response_json = response.json()
+    contact_info = response.json().get("items", [])
+    print(contact_info)
 
-    items = response_json.get("items", [])
-    if items:
+    params = {"q": company_name + " 企業概要", "num": num_results}
+    response = requests.get(URL, params=params)
+    print(response)
+    outline_url = response.json().get("items", [])[0].get("link")
+    html_response = requests.get(outline_url)
+    html_response.encoding = "utf-8"
+    soup = BeautifulSoup(html_response.text, "html.parser", from_encoding="utf-8")
+    # scriptタグとstyleタグを削除する
+    for script in soup(["script", "style"]):
+        script.decompose()
+
+    # ページ内のすべてのテキストノードを探索し、電話番号が含まれているものを抽出
+    phone_numbers = set()
+    for text in soup.find_all(text=re.compile(phone_pattern)):
+        phone = re.search(phone_pattern, text)
+        if phone:
+            phone_numbers.add(text.parent.get_text(strip=True))
+
+    phone_number_info = ";  ".join(map(str, phone_numbers))
+
+    # メールアドレスの取得
+    email = soup.find(
+        text=re.compile(r"\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b")
+    )
+    email = (
+        email.strip() if email is not None else "メールアドレスは取得できませんでした。"
+    )
+
+    if contact_info and outline_url:
         item = {
             "company": company_name,
-            "title": items[0].get("title"),
-            "link": items[0].get("link"),
-            "snippet": items[0].get("snippet"),
+            "問い合わせページURL": contact_info[0].get("link"),
+            "企業概要ページURL": outline_url,
+            "連絡先": phone_number_info,
+            "メールアドレス": email,
         }
         return item
 
@@ -49,7 +83,13 @@ def save_to_csv(data):
     directory = "downloads/" + filename
 
     with open(directory, mode="w", newline="", encoding="utf-8") as file:
-        fieldnames = ["company", "title", "link", "snippet"]
+        fieldnames = [
+            "company",
+            "問い合わせページURL",
+            "企業概要ページURL",
+            "連絡先",
+            "メールアドレス",
+        ]
         writer = csv.DictWriter(file, fieldnames=fieldnames)
         writer.writeheader()
         for row in data:

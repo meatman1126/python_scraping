@@ -4,7 +4,12 @@ from config.database import db, init_db
 from config.config import Config
 
 from models.user import User, Role, setup_user_role
-from controllers import user_controller, index_controller, scraping_controller
+from controllers import (
+    user_controller,
+    index_controller,
+    scraping_controller,
+    voice_controller,
+)
 
 
 def create_app():
@@ -23,6 +28,7 @@ def create_app():
     app.register_blueprint(index_controller.index_page)
     app.register_blueprint(user_controller.user_page)
     app.register_blueprint(scraping_controller.scraping_page)
+    app.register_blueprint(voice_controller.voice_page)
     return app
 
 

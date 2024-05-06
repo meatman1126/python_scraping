@@ -1,17 +1,18 @@
 <script>
     import Menu from "./components/Menu.svelte";
-    import { isOpen } from "./components/stores.js";
+
     function getStaticImage(filename) {
         return "/static/images/" + filename;
     }
 </script>
 
+<div class="page-header p-3 mb-5 text-white bg-dark">
+    <h1>ポートフォリオ一覧</h1>
+    <Menu />
+</div>
+
 <div class="container">
-    <div class="page-header">
-        <h1>ポートフォリオ一覧</h1>
-        <Menu />
-    </div>
-    <div class="card-container" class:shifted={$isOpen}>
+    <div class="card-container">
         <!-- ここにカードを追加 -->
         <div class="card">
             <a href="/fileup">
@@ -27,14 +28,26 @@
             </p>
         </div>
         <div class="card">
-            <img src={getStaticImage("scraping.jpg")} alt="ポートフォリオ2" />
-            <h3>タイトル1</h3>
-            <p>ポートフォリオ2の説明文</p>
+            <a href="/voice">
+                <img
+                    src={getStaticImage("voice_recognition.jpg")}
+                    alt="ポートフォリオ2"
+                />
+            </a>
+
+            <h3>音声認識</h3>
+            <p>
+                マイクからAIに質問をすることができます。<br
+                />生成AIを利用する際にプロンプトを書き起こすの面倒という方向けです。
+            </p>
         </div>
         <div class="card">
-            <img src={getStaticImage("scraping.jpg")} alt="ポートフォリオ3" />
-            <h3>タイトル1</h3>
-            <p>ポートフォリオ3の説明文</p>
+            <img
+                src={getStaticImage("image_recognition.jpg")}
+                alt="ポートフォリオ3"
+            />
+            <h3>画像認識</h3>
+            <p>現在製作中です。</p>
         </div>
         <!-- カードの追加終わり -->
     </div>
@@ -44,14 +57,6 @@
     .page-header {
         display: flex;
         justify-content: space-between;
-    }
-    .shifted {
-        transform: translateY(150px);
-    }
-
-    .container {
-        width: 90%;
-        max-width: 1200px;
     }
 
     .card-container {

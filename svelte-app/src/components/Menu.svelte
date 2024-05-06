@@ -1,62 +1,44 @@
 <script>
-    import { isOpen } from "./stores.js";
+    import { onMount } from "svelte";
+    import { Button, Offcanvas } from "sveltestrap";
+    let isOpen = false;
+    let userRoles = [];
+    let isLoaded = false;
+    onMount(async () => {
+        const res = await fetch("/api/get-user-roles");
+        console.log(res);
+        userRoles = await res.json();
+        console.log(userRoles);
+        console.log(hasRole("Admin"));
+        isLoaded = true;
+    });
+    const hasRole = (role) => userRoles.includes(role);
 
-    function toggleMenu() {
-        $isOpen = !$isOpen;
-    }
-
-    function handleKeydown(event) {
-        if (event.key === "Enter" || event.key === " ") {
-            toggleMenu();
-        }
-    }
+    const toggle = (event) => {
+        isOpen = !isOpen;
+    };
 </script>
 
-<div>
-    <div
-        class="hamburger"
-        role="button"
-        tabindex="0"
-        on:click={toggleMenu}
-        on:keydown={handleKeydown}
-    >
-        <h1>&#9776;</h1>
+<Button color="light" on:click={toggle} size="lg">&#9776;</Button>
+<Offcanvas theme="light" {isOpen} {toggle} header="Link" placement="start">
+    <div class="list-group">
+        {#if isLoaded}
+            <a href="/index" class="list-group-item list-group-item-action">
+                ポートフォリオ一覧
+            </a>
+            {#if hasRole("Admin")}
+                <a
+                    href="/register"
+                    class="list-group-item list-group-item-action"
+                    >ユーザ新規登録</a
+                >
+            {/if}
+            <a href="/logout" class="list-group-item list-group-item-action"
+                >ログアウト</a
+            >
+        {/if}
     </div>
-    <div>
-        <ul class={$isOpen ? "menu open" : "menu"}>
-            <li><a href="/home">Home</a></li>
-            <li><a href="/about">About</a></li>
-            <li><a href="/services">Services</a></li>
-            <li><a href="/contact">Contact</a></li>
-        </ul>
-    </div>
-</div>
+</Offcanvas>
 
 <style>
-    .menu {
-        display: block;
-        opacity: 0;
-        position: absolute;
-        background-color: white;
-        list-style-type: none;
-        padding: 20px;
-        box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-        width: 200px;
-        transition:
-            opacity 0.3s ease,
-            transform 0.3s ease;
-        transform: translateX(20px);
-        pointer-events: none;
-        right: 0;
-    }
-    .menu.open {
-        opacity: 1;
-        transform: translateX(0);
-        pointer-events: auto;
-    }
-    .hamburger {
-        cursor: pointer;
-        user-select: none;
-        position: relative;
-    }
 </style>
