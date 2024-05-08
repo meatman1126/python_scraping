@@ -8,7 +8,6 @@ class Role(db.Model, RoleMixin):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(30), unique=True, nullable=False)
     discription = db.Column(db.String(100), nullable=False)
-    users = db.relationship("User", backref="role")
     created_at = db.Column(
         db.DateTime, nullable=False, server_default=db.sql.functions.current_timestamp()
     )
@@ -26,7 +25,9 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(30), unique=True, nullable=False)
     password = db.Column(db.String(1024), nullable=False)
     username = db.Column(db.String(30), nullable=False)
-    role_id = db.Column(db.Integer, db.ForeignKey("role.id"), nullable=False)
+    roles = db.relationship(
+        "Role", secondary="roles_users", backref=db.backref("user", lazy="dynamic")
+    )
     active = db.Column(db.Boolean, nullable=False, server_default="1")
     note = db.Column(db.String(1024))
     fs_uniquifier = db.Column(
@@ -42,17 +43,33 @@ class User(db.Model, UserMixin):
     updated_by = db.Column(db.String(30), nullable=False, server_default="System")
 
     def register(user):
-        db.session.add(
-            User(
+        try:
+            user_record = User(
                 email=user["email"],
                 password=hash_password(user["password"]),
                 username=user["username"],
-                role_id=Role.COMMON_ROLE_ID,
                 note=user["note"],
                 fs_uniquifier=str(uuid.uuid4()),
             )
-        )
-        db.session.commit()
+            db.session.add(user_record)
+            db.session.flush()
+
+            roles_users_record = RolesUsers(
+                user_id=user_record.id,
+                role_id=Role.COMMON_ROLE_ID,
+            )
+            db.session.add(roles_users_record)
+            db.session.commit()
+        except Exception as e:
+            db.session.rollback()
+            return str(e), 500
+
+
+class RolesUsers(db.Model):
+    __tablename__ = "roles_users"
+    id = db.Column(db.Integer(), primary_key=True, autoincrement=True)
+    user_id = db.Column(db.Integer(), db.ForeignKey("user.id"))
+    role_id = db.Column(db.Integer(), db.ForeignKey("role.id"))
 
 
 def setup_user_role():
@@ -71,8 +88,14 @@ def setup_user_role():
                 email="test@exemple.com",
                 password=hash_password("password"),
                 username="testadmin",
-                role_id="1",
                 note="Test admin user. Automaticaly registered",
+            )
+        )
+        db.session.commit()
+        db.session.add(
+            RolesUsers(
+                user_id="1",
+                role_id="1",
             )
         )
         registered = True

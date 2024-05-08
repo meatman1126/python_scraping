@@ -1,3 +1,5 @@
+<!-- モーダルはSvelete Strapで定義されているものを使用するため本ファイルで実装されたモーダルは使用しない -->
+
 <script>
 	export let showModal; // boolean
 

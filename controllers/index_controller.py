@@ -1,6 +1,7 @@
 from flask import render_template, redirect, url_for, Blueprint
 from flask_security import login_required, current_user
 
+
 index_page = Blueprint("index_page", __name__)
 
 
