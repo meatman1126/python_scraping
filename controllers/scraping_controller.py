@@ -1,3 +1,4 @@
+from Exception.api_error import APIError
 from flask import (
     render_template,
     redirect,
@@ -5,7 +6,7 @@ from flask import (
     Blueprint,
     request,
     send_from_directory,
-    send_file,
+    jsonify,
 )
 from flask_security import login_required, current_user
 import services.get_company_info as get_company_info
@@ -19,14 +20,27 @@ def upload_file():
     # return "ok"
     if "fileUpload" in request.files:
         file = request.files["fileUpload"]
-        if file and file.mimetype.endswith("csv"):
-            filename = get_company_info.get_companies_info(file)
-            # filepath = DIRECTORY + filename
-            # print(filepath)
+        try:
 
-            # as_attachment=Trueとすることでブラウザにファイル表示ではなくダウンロードを促す
-            return send_from_directory(DIRECTORY, filename, as_attachment=True)
-            # return send_file(filepath, as_attachment=True)
+            if file and file.mimetype.endswith("csv"):
+                filename = get_company_info.get_companies_info(file)
+                # filepath = DIRECTORY + filename
+                # print(filepath)
+
+                # as_attachment=Trueとすることでブラウザにファイル表示ではなくダウンロードを促す
+                return send_from_directory(DIRECTORY, filename, as_attachment=True)
+                # return send_file(filepath, as_attachment=True)
+        except APIError as e:
+            return (
+                jsonify(
+                    {
+                        "error": "Too many requests",
+                        # "status_code": e.status_code,
+                        "message": "リクエスト回数が上限を超過しました。一定時間後に再度お試しください。",
+                    }
+                ),
+                429,
+            )
 
         # ファイルを保存するロジックをここに記述
         return "Invalid file type"

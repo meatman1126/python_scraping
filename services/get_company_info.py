@@ -6,6 +6,8 @@ from io import StringIO
 import datetime
 from bs4 import BeautifulSoup
 import re
+from flask import jsonify
+from Exception.api_error import APIError
 
 # .envファイルの内容を読み込見込む
 load_dotenv()
@@ -22,6 +24,8 @@ def search_company_info(company_name):
     """企業名に基づいて情報を検索し、結果を返す"""
     params = {"q": company_name + " お問い合わせ", "num": num_results}
     response = requests.get(URL, params=params)
+    if response.status_code == 429:
+        raise APIError("Too many requests", 429)
     contact_info = response.json().get("items", [])
     print(contact_info)
 

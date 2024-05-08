@@ -35,6 +35,7 @@ export default {
 		scraping: 'src/scraping.js',
 		index: 'src/index.js',
 		voice: 'src/voice.js',
+		error: 'src/error.js',
 	},
 	output: {
 		sourcemap: true,

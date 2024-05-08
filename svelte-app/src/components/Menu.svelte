@@ -19,7 +19,7 @@
     };
 </script>
 
-<Button color="light" on:click={toggle} size="lg">&#9776;</Button>
+<Button type="button" color="light" on:click={toggle} size="lg">&#9776;</Button>
 <Offcanvas theme="light" {isOpen} {toggle} header="Link" placement="start">
     <div class="list-group">
         {#if isLoaded}
